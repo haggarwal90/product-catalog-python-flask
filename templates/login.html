@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+{% block content %}
+ <form action="/login" method="post">
+    <label>Username</label>
+    <input name="username" type="text"> </br> </br>
+    <label>Password</label>
+    <input name="password" type="text"> </br> </br>
+    <input type="submit"> </input>
+    <p>{{message}}</p>
+ </form>
+{% endblock %}

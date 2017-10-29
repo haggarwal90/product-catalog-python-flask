@@ -1,18 +1,19 @@
-from flask import Flask, request
+from flask import Flask, request, render_template, redirect
 import csv
 
 # Initialize flask application
 app = Flask(__name__);
 
 @app.route('/products' ,methods = ['GET', 'POST', 'PUT'])
-def getOrSetProducts(self):
+def getOrSetProducts():
     if request.method == 'GET':
-        productsResponse = []
+        productsResponse = {"items": []}
         with open('database/products.csv', 'r') as productscsv:
             productsReader = csv.reader(productscsv, delimiter=',')
-            for row in productsReader:
-                productsResponse.push(','.join(row))
-            return productsResponse
+            for idx, row in enumerate(productsReader):
+                temp = ','.join(row)
+                productsResponse['items'].insert(idx, temp)
+            return render_template('products.html', products = productsResponse)
     elif request.method == 'POST':
         formProductName = request.form['name']
         frmProductQuantity = request.form['quantity']
@@ -42,16 +43,20 @@ def getOrDeleteProductById(name):
 
         return "Delete by id called"
 
-@app.route('/login', methods = ['POST'])
+@app.route('/login', methods = ['GET','POST'])
 def authenticate():
-    formUser = request.form['username']
-    formPassword = request.form['password']
-    with open('users.csv', 'r') as usercsv:
-        userReader = csv.reader(usercsv, delimiter=',')
-        for row in userReader:
-            if row[0] == formUser and row[1] == formPassword:
-                return 'Success'
-        return 'Failed'
+    if request.method == 'GET':
+        return render_template('login.html')
+    elif request.method =='POST':
+        print "post request recieved" + request.form['username']
+        formUser = request.form['username']
+        formPassword = request.form['password']
+        with open('database/users.csv', 'r') as usercsv:
+            userReader = csv.reader(usercsv, delimiter=',')
+            for row in userReader:
+                if row[0] == formUser and row[1] == formPassword:
+                    return redirect('/products')
+            return render_template('login.html', message = "Incorrect credential")
 
 @app.route('/signup', methods = ['POST'])
 def register():
