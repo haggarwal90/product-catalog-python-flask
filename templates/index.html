@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -16,7 +17,7 @@
         <li><span>{{username}}</span></li>
         <li><a href="#">Logout</a></li>
       {% else %}
-      <li><a href="#">Login</a></li>
+      <li id="login"><a href="#">Login</a></li>
       <li><a href="#">Register</a></li>
       {% endif %}
     </ul>
@@ -25,5 +26,24 @@
 <div class="container">
     {% block content %}{% endblock %}
 </div>
+
+<!-- The Modal -->
+<div id="loginModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <form action="/login" method="post">
+        <label>Username</label>
+        <input name="username" type="text"> </br> </br>
+        <label>Password</label>
+        <input name="password" type="text"> </br> </br>
+        <input type="submit"> </input>
+        <p>{{message}}</p>
+    </form>
+  </div>
+
+</div>
+<script src="{{ url_for('static', filename = 'js/common.js') }}"></script>
 </body>
 </html>

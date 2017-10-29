@@ -4,6 +4,10 @@ import csv
 # Initialize flask application
 app = Flask(__name__);
 
+@app.route('/', methods = ['GET'])
+def home():
+    return render_template('home.html')
+
 @app.route('/products' ,methods = ['GET', 'POST', 'PUT'])
 def getOrSetProducts():
     if request.method == 'GET':
@@ -43,11 +47,9 @@ def getOrDeleteProductById(name):
 
         return "Delete by id called"
 
-@app.route('/login', methods = ['GET','POST'])
+@app.route('/login', methods = ['POST'])
 def authenticate():
-    if request.method == 'GET':
-        return render_template('login.html')
-    elif request.method =='POST':
+    if request.method =='POST':
         print "post request recieved" + request.form['username']
         formUser = request.form['username']
         formPassword = request.form['password']
